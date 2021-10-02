@@ -1,0 +1,32 @@
+ADMIN = (login_req->enter_login_info->(valid_login_info->LOGIN
+        | invalid_login_info->get_re_enter_login_info->ADMIN)),
+LOGIN= (go_to_home_page->(teacher_list_pg_req->(go_home->LOGIN | logout_req->ADMIN)
+        |student_list_pg_req->(go_home->LOGIN | logout_req->ADMIN)
+        |field_req->FIELD
+        |select_field_req->(empty_filed->FIELD | non_empty->SUBJECT)
+        |remove_sub_req->see_update_sub_list->(go_home->LOGIN | logout_req->ADMIN)
+        |dashboard_req->(go_home->LOGIN | logout_req->ADMIN)
+        |feedback_req->(go_home->LOGIN | logout_req->ADMIN))),
+FIELD= (enter_add_subject_field_or_remove->see_update_field->(go_home->LOGIN | logout_req->ADMIN)),
+SUBJECT= (enter_data_for_add_sub->see_update_sub_list->(go_home->LOGIN | logout_req->ADMIN)).
+
+
+SYSTEM = (send_to_login_pg->get_login_info->(get_valid_login_info->LOGIN
+        | get_invalid_login_info->send_re_enter_login_info->SYSTEM)),
+LOGIN= (send_to_home_page->(show_teacher_list_pg->(send_home->LOGIN | destroy_session->SYSTEM)
+        |show_student_list_pg->(send_home->LOGIN | destroy_session->SYSTEM)
+        |show_field->FIELD
+        |send_to_subject_list_page->(get_empty_filed->FIELD | get_non_empty->SUBJECT)
+        |get_remove_sub_req->show_update_sub_list->(send_home->LOGIN | destroy_session->SYSTEM)
+        |show_dashboard->(send_home->LOGIN | destroy_session->SYSTEM)
+        |show_feedback->(send_home->LOGIN | destroy_session->SYSTEM))),
+FIELD= (get_add_subject_field_or_remove->show_update_field->(send_home->LOGIN | destroy_session->SYSTEM)),
+SUBJECT= (get_data_for_add_sub->show_update_sub_list->(send_home->LOGIN | destroy_session->SYSTEM)).
+
+
+||ADMIN_ACTIVITY=(ADMIN || SYSTEM)
+                /{login_req/send_to_login_pg, enter_login_info/get_login_info, valid_login_info/get_valid_login_info, invalid_login_info/get_invalid_login_info, get_re_enter_login_info/send_re_enter_login_info, 
+                 go_to_home_page/send_to_home_page, teacher_list_pg_req/show_teacher_list_pg, go_home/send_home, logout_req/destroy_session, student_list_pg_req/show_student_list_pg,
+                 field_req/show_field, select_field_req/send_to_subject_list_page, empty_filed/get_empty_filed, non_empty/get_non_empty, enter_add_subject_field_or_remove/get_add_subject_field_or_remove,
+                 see_update_field/show_update_field, enter_data_for_add_sub/get_data_for_add_sub, see_update_sub_list/show_update_sub_list, remove_sub_req/get_remove_sub_req, 
+                 see_update_sub_list/show_update_sub_list, dashboard_req/show_dashboard, feedback_req/show_feedback}.

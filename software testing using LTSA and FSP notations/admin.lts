@@ -1,0 +1,11 @@
+ADMIN = (login_req->enter_login_info->(valid_login_info->LOGIN
+        | invalid_login_info->get_re_enter_login_info->ADMIN)),
+LOGIN= (go_to_home_page->(teacher_list_pg_req->(go_home->LOGIN | logout_req->ADMIN)
+        |student_list_pg_req->(go_home->LOGIN | logout_req->ADMIN)
+        |field_req->FIELD
+        |select_field_req->(empty_filed->FIELD | non_empty->SUBJECT)
+        |remove_sub_req->see_update_sub_list->(go_home->LOGIN | logout_req->ADMIN)
+        |dashboard_req->(go_home->LOGIN | logout_req->ADMIN)
+        |feedback_req->(go_home->LOGIN | logout_req->ADMIN))),
+FIELD= (enter_add_subject_field->see_update_field->(go_home->LOGIN | logout_req->ADMIN)),
+SUBJECT= (enter_data_for_add_sub->see_update_sub_list->(go_home->LOGIN | logout_req->ADMIN)).
