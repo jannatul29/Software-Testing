@@ -1,0 +1,12 @@
+SYSTEM=(send_to_acc_create_pg->get_acnt_info->(get_valid_acnt_info->LOGIN
+       |get_invalid_acnt_info->send_re_enter_req->SYSTEM)
+ 	   |check_acnt->LOGIN
+       |send_to_recvy_page->get_pass_rcvry_pass->(exist_acc->LOGIN
+       |not_exist_acc->send_re_enter_recvy_pass->SYSTEM)
+       ),
+LOGIN=(send_login_req->get_login_info->(get_valid_login_info->send_to_profile->(send_to_prof_edit_pg->Profile_edit
+     | get_feedback_req->Feedback)
+     | get_invalid_login_info->send_re_enter_login_msg->LOGIN)),
+Profile_edit=(get_prof_edit_data->show_update_prof->destroy_session->SYSTEM),
+Feedback =(get_feedback->(logged_send_success_msg->destroy_session->SYSTEM 
+         | not_logged_send_login_req->LOGIN)).

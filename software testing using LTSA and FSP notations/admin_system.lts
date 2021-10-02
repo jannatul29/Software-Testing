@@ -1,0 +1,11 @@
+SYSTEM = (send_to_login_pg->get_login_info->(get_valid_login_info->LOGIN
+        | get_invalid_login_info->send_re_enter_login_info->SYSTEM)),
+LOGIN= (send_to_home_page->(show_teacher_list_pg->(send_home->LOGIN | destroy_session->SYSTEM)
+        |show_student_list_pg->(send_home->LOGIN | destroy_session->SYSTEM)
+        |show_field->FIELD
+        |send_to_subject_list_page->(get_empty_filed->FIELD | get_non_empty->SUBJECT)
+        |get_remove_sub_req->show_update_sub_list->(send_home->LOGIN | destroy_session->SYSTEM)
+        |show_dashboard->(send_home->LOGIN | destroy_session->SYSTEM)
+        |show_feedback->(send_home->LOGIN | destroy_session->SYSTEM))),
+FIELD= (get_add_subject_field->show_update_field->(send_home->LOGIN | destroy_session->SYSTEM)),
+SUBJECT= (get_data_for_add_sub->show_update_sub_list->(send_home->LOGIN | destroy_session->SYSTEM)).

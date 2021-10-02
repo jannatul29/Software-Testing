@@ -1,0 +1,6 @@
+SYSTEM= (system_student->STUDENT
+         |system_teacher->TEACHER),
+STUDENT= (send_to_student_list_pg->send_to_payment_pg->get_payment_info->(get_valid_payment_info->PAYMENT
+          |get_invalid_payment_info->send_re_enter_req->STUDENT)),
+PAYMENT= (send_confirmation_mail->go_to_meeting_pg->send_rating_req->get_rating->send_thanks_msg->(send_subject_field_pg->STUDENT | destroy_session->SYSTEM)),
+TEACHER= (send_sms_for_join_meeting->send_to_profile->go_to_meeting_pg->(send_to_prof_pg->TEACHER | destroy_session->SYSTEM)).

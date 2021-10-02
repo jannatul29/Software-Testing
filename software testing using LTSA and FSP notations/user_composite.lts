@@ -1,0 +1,34 @@
+USER=  (create_acc_req->enter_acnt_info->(entrd_valid_acnt_info->LOGIN
+       |entrd_invalid_acnt_info->get_re_enter_req->USER)
+       |have_acnt->LOGIN
+       |pass_recvy_req->enterd_recvy_pass->(exist_acc->LOGIN
+       |not_exist_acc->get_re_enter_recvy_pass->USER)
+       ),
+LOGIN=(get_login_req->enter_login_info->(entrd_valid_login_info->go_to_profile->(prof_edit_req->Profile_edit
+     | feedback_req->Feedback)
+     | entrd_invalid_login_info->get_re_enter_login_msg->LOGIN)),
+Profile_edit=(enterd_prof_eidt_data->see_update_prof->logout_req->USER),
+Feedback =(enterd_feedback->(logged_get_success_msg->logout_req->USER 
+         | not_logged_get_login_req->LOGIN)).
+
+
+SYSTEM=(send_to_acc_create_pg->get_acnt_info->(get_valid_acnt_info->LOGIN
+       |get_invalid_acnt_info->send_re_enter_req->SYSTEM)
+ 	   |check_acnt->LOGIN
+       |send_to_recvy_page->get_pass_rcvry_pass->(exist_acc->LOGIN
+       |not_exist_acc->send_re_enter_recvy_pass->SYSTEM)
+       ),
+LOGIN=(send_login_req->get_login_info->(get_valid_login_info->send_to_profile->(send_to_prof_edit_pg->Profile_edit
+     | get_feedback_req->Feedback)
+     | get_invalid_login_info->send_re_enter_login_msg->LOGIN)),
+Profile_edit=(get_prof_edit_data->show_update_prof->destroy_session->SYSTEM),
+Feedback =(get_feedback->(logged_send_success_msg->destroy_session->SYSTEM 
+         | not_logged_send_login_req->LOGIN)).
+
+
+||USER_General_part=(USER || SYSTEM)
+   /{create_acc_req/send_to_acc_create_pg, enter_acnt_info/get_acnt_info, entrd_valid_acnt_info/get_valid_acnt_info,entrd_invalid_acnt_info/get_invalid_acnt_info,get_re_enter_req/send_re_enter_req,get_login_req/send_login_req,
+     enter_login_info/get_login_info, entrd_valid_login_info/get_valid_login_info,entrd_invalid_login_info/get_invalid_login_info,get_re_enter_login_msg/send_re_enter_login_msg,go_to_profile/send_to_profile,prof_edit_req/send_to_prof_edit_pg,
+     enterd_prof_eidt_data/get_prof_edit_data,see_update_prof/show_update_prof,logout_req/destroy_session,feedback_req/get_feedback_req,enterd_feedback/get_feedback,logged_get_success_msg/logged_send_success_msg,
+    not_logged_get_login_req/not_logged_send_login_req,logout_req/destroy_session, have_acnt/check_acnt,pass_recvy_req/send_to_recvy_page,enterd_recvy_pass/get_pass_rcvry_pass,exist_acc/exist_acc,
+    not_exist_acc/not_exist_acc,get_re_enter_recvy_pass/send_re_enter_recvy_pass}.

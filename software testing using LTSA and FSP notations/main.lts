@@ -1,0 +1,6 @@
+USER= (user_student->STUDENT
+      |user_teacher->TEACHER),
+STUDENT= (subject_field_select_req->subject_enroll_req->enter_payment_info->(valid_payment_info->PAYMENT
+         |invalid_payment_info->get_re_enter_req->STUDENT)),
+PAYMENT= (get_confirmation_mail->send_meeting_join_req->get_rating_req->enter_rating->get_thanks_msg->(go_subject_field_pg->STUDENT | logout_req->USER)),
+TEACHER= (get_sms_for_join_meeting->go_to_profile->send_join_meeting_req->(go_to_prof_pg->TEACHER | logout_req->USER)).

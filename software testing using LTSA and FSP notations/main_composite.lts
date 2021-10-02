@@ -1,0 +1,23 @@
+USER= (user_student->STUDENT
+      |user_teacher->TEACHER),
+STUDENT= (subject_field_select_req->subject_enroll_req->enter_payment_info->(valid_payment_info->PAYMENT
+         |invalid_payment_info->get_re_enter_req->STUDENT)),
+PAYMENT= (get_confirmation_mail->send_meeting_join_req->get_rating_req->enter_rating->get_thanks_msg->(go_subject_field_pg->STUDENT | logout_req->USER)),
+TEACHER= (get_sms_for_join_meeting->go_to_profile->send_join_meeting_req->(go_to_prof_pg->TEACHER | logout_req->USER)).
+
+
+
+SYSTEM= (system_student->STUDENT
+         |system_teacher->TEACHER),
+STUDENT= (send_to_student_list_pg->send_to_payment_pg->get_payment_info->(get_valid_payment_info->PAYMENT
+          |get_invalid_payment_info->send_re_enter_req->STUDENT)),
+PAYMENT= (send_confirmation_mail->go_to_meeting_pg->send_rating_req->get_rating->send_thanks_msg->(send_subject_field_pg->STUDENT | destroy_session->SYSTEM)),
+TEACHER= (send_sms_for_join_meeting->send_to_profile->go_to_meeting_pg->(send_to_prof_pg->TEACHER | destroy_session->SYSTEM)).
+
+
+||TEACHING_ASSISTENT_SERVICE=(USER || SYSTEM)
+                    /{user_student/system_student, user_teacher/system_teacher, subject_field_select_req/send_to_student_list_pg,subject_enroll_req/send_to_payment_pg,
+                    enter_payment_info/get_payment_info, valid_payment_info/get_valid_payment_info, invalid_payment_info/get_invalid_payment_info,get_re_enter_req/send_re_enter_req,
+                    get_confirmation_mail/send_confirmation_mail, send_meeting_join_req/go_to_meeting_pg, get_rating_req/send_rating_req, enter_rating/get_rating, get_thanks_msg/send_thanks_msg,
+                    go_subject_field_pg/send_subject_field_pg, get_sms_for_join_meeting/send_sms_for_join_meeting,go_to_profile/send_to_profile, send_join_meeting_req/go_to_meeting_pg, 
+                    go_to_prof_pg/send_to_prof_pg, logout_req/destroy_session}.

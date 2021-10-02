@@ -1,0 +1,12 @@
+USER=  (create_acc_req->enter_acnt_info->(entrd_valid_acnt_info->LOGIN
+       |entrd_invalid_acnt_info->get_re_enter_req->USER)
+       |have_acnt->LOGIN
+       |pass_recvy_req->enterd_recvy_pass->(exist_acc->LOGIN
+       |not_exist_acc->get_re_enter_recvy_pass->USER)
+       ),
+LOGIN=(get_login_req->enter_login_info->(entrd_valid_login_info->go_to_profile->(prof_edit_req->Profile_edit
+     | feedback_req->Feedback)
+     | entrd_invalid_login_info->get_re_enter_login_msg->LOGIN)),
+Profile_edit=(enterd_prof_eidt_data->see_update_prof->logout_req->USER),
+Feedback =(enterd_feedback->(logged_get_success_msg->logout_req->USER 
+         | not_logged_get_login_req->LOGIN)).
